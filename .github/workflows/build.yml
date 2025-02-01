@@ -1,0 +1,32 @@
+name: Build Android App
+
+on:
+  push:
+    branches:
+      - develop
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set Up Flutter
+        uses: subosito/flutter-action@v2.14.0
+        with:
+          flutter-version: '3.27.3'
+
+      - name: Install Dependencies
+        run: flutter pub get
+
+      - name: Build APK
+        run: flutter build apk --release
+
+      - name: Upload APK as Artifact
+        uses: actions/upload-artifact@v4.6.0
+        with:
+          name: app-release.apk
+          path: build/app/outputs/flutter-apk/app-release.apk
